@@ -1,0 +1,6 @@
+Next day Plan - Backend
+    - Create a api controller
+    - CReate request (front end validation) using joi
+    - Create Service function
+    - Upload file using multar
+    - video 69
