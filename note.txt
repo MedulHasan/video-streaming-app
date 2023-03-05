@@ -1,5 +1,18 @@
-Next day Plan - Backend
-    - Create a api controller
-    - CReate request (front end validation) using joi
+Next day Plan
+    - Create project folder setup
+    - Create Navigation functionality
+    - Create Pixel Ration functionality for responsive design
+    - Redux toolkit (rtk-query) setup
+    - Setup asset file (font family/svg/lottie/image)
+
+Pending - Backend
+    - Create request (front end validation) using joi
     - Create Service function
-    - video 69
+    - video 73
+
+Pending - Frontend
+
+
+
+UI KIT:
+    https://www.behance.net/gallery/145850337/Mova-Movie-Streaming-App-UI-Kit?tracking_source=search_projects%7Cvideo+streaming+mobile+app

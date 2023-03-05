@@ -1,12 +1,12 @@
 import {View, Text} from 'react-native';
 import React from 'react';
 
-const App = () => {
+const Add = () => {
   return (
     <View>
-      <Text>Video Streaming App</Text>
+      <Text>Add</Text>
     </View>
   );
 };
 
-export default App;
+export default Add;
