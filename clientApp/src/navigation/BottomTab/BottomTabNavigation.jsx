@@ -1,23 +1,18 @@
 /* eslint-disable react/no-unstable-nested-components */
-import React, {useRef} from 'react';
+import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {ADD, UPLOAD, HOME} from '../routeName';
+import {ADD, HOME} from '../routeName';
 import Home from '../../screens/Home/Home';
 import HomeIcon from '../../assets/svg/home.svg';
-import ExploreIcon from '../../assets/svg/explore.svg';
 import AddIcon from '../../assets/svg/add.svg';
 import CustomTabBarIcon from './CustomTabBarIcon';
 import {customTabBarIconStyle} from './customTabBarIcon.style';
 import {useTheme} from '@react-navigation/native';
 import Add from '../../screens/Add/Add';
-import CreateBtmSheet from '../../screens/Add/CreateBtmSheet';
-import CustomTabBarButton from './CustomTabBarButton';
-import UploadVideo from '../../screens/UploadVideo/UploadVideo';
 
 const BottomTab = createBottomTabNavigator();
 
 const BottomTabNavigation = () => {
-  const createBtmSheet = useRef(null);
   const {colors} = useTheme();
   const customTabBarStyle = customTabBarIconStyle(colors);
 
@@ -40,7 +35,7 @@ const BottomTabNavigation = () => {
             },
           }}
         />
-        <BottomTab.Screen
+        {/* <BottomTab.Screen
           name={ADD}
           component={Add}
           options={{
@@ -57,16 +52,16 @@ const BottomTabNavigation = () => {
               return <CreateBtmSheet createBtmSheet={createBtmSheet} />;
             },
           })}
-        />
+        /> */}
         <BottomTab.Screen
-          name={UPLOAD}
-          component={UploadVideo}
+          name={ADD}
+          component={Add}
           options={{
             tabBarIcon: ({focused}) => {
               return (
                 <CustomTabBarIcon
-                  title={UPLOAD}
-                  Icon={ExploreIcon}
+                  title={ADD}
+                  Icon={AddIcon}
                   focused={focused}
                 />
               );

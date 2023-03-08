@@ -1,84 +1,35 @@
-import {View, Text, TextInput, Pressable} from 'react-native';
-import React from 'react';
+import {Text, Pressable} from 'react-native';
+import React, {useState} from 'react';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {customDatePickerStyle} from './CustomDatePicker.style';
 import {useTheme} from '@react-navigation/native';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import {useState} from 'react';
-import moment from 'moment';
-import dpr from '../../../styles/DevicePixelRatio';
-const CustomDatePicker = ({isCustom, text, icon, disable, style = {}}) => {
-  const [isStartFocus, setIsStartFocus] = useState(false);
-  const [isStartedDatePickerVisible, setStartedDatePickerVisibility] =
-    useState(false);
+const CustomDatePicker = ({label = '', icon, value, onConfirm}) => {
+  const [isShowDatePicker, setIsShowDatePicker] = useState(false);
 
-  const [selectedStartedDate, setSelectedStartedDate] = useState('');
-  const [startDateValue, setStartDateValue] = useState('');
-  const [endDateValue, setEndDateValue] = useState('');
+  const handleConfirm = date => {
+    onConfirm(date);
+    setIsShowDatePicker(false);
+  };
+
   const {colors} = useTheme();
+  const datePickerStyle = customDatePickerStyle(colors, value);
 
-  const {
-    textInputStyle,
-    iconPositionStyle,
-    textInputContainer,
-    activeStartTextInput,
-  } = customDatePickerStyle(
-    colors,
-    isCustom,
-    isStartFocus,
-    selectedStartedDate,
-    disable,
-  );
-
-  const showStartedDatePicker = () => {
-    setStartedDatePickerVisibility(true);
-  };
-
-  const hideStartedDatePicker = () => {
-    setStartedDatePickerVisibility(false);
-  };
-
-  const handleStartedConfirm = date => {
-    let selectedStartedDateFormat = moment(date).format('ll');
-    setSelectedStartedDate(selectedStartedDateFormat);
-    hideStartedDatePicker();
-  };
-  const getValue = (type, text) => {
-    if (type === 'start') {
-      setStartDateValue(text);
-    } else {
-      setEndDateValue(text);
-    }
-  };
   return (
-    <View>
-      <View style={textInputContainer}>
-        <Pressable
-          style={{height: dpr(48)}}
-          onPress={!disable ? showStartedDatePicker : null}>
-          <TextInput
-            value={isCustom && selectedStartedDate}
-            onFocus={() => setIsStartFocus(true)}
-            onBlur={() => setIsStartFocus(false)}
-            numberOfLines={1}
-            editable={!isCustom && !disable ? true : false}
-            onChangeText={newText => getValue('start', newText)}
-            placeholder={isCustom ? 'Select Date' : !disable ? 'Type Date' : ''}
-            placeholderTextColor={colors.rightArrow}
-            style={{
-              ...textInputStyle,
-              ...activeStartTextInput,
-            }}
-          />
-          {isCustom && <Text style={iconPositionStyle}>{icon}</Text>}
-        </Pressable>
-      </View>
+    <>
+      {label && <Text style={datePickerStyle.label}>{label}</Text>}
+      <Pressable
+        style={datePickerStyle.textInputContainer}
+        onPress={() => setIsShowDatePicker(true)}>
+        {icon}
+        <Text style={datePickerStyle.text}>{value || 'Select Date'}</Text>
+      </Pressable>
       <DateTimePickerModal
-        isVisible={isStartedDatePickerVisible}
+        isVisible={isShowDatePicker}
         mode="date"
-        onConfirm={handleStartedConfirm}
-        onCancel={hideStartedDatePicker}
+        onConfirm={handleConfirm}
+        onCancel={() => setIsShowDatePicker(false)}
       />
-    </View>
+    </>
   );
 };
 

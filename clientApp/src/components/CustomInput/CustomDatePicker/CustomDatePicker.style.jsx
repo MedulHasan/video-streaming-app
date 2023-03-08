@@ -1,45 +1,31 @@
-import {Dimensions, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import dpr from '../../../styles/DevicePixelRatio';
-const {width} = Dimensions.get('screen');
 
-export const customDatePickerStyle = (...args) => {
-  const [colors, isCustom, isStartFocus, selectedStartedDate, disable] = args;
-
+export const customDatePickerStyle = (colors, date) => {
   return StyleSheet.create({
     textInputContainer: {
+      borderWidth: 1,
+      borderColor: date ? '#635BFE' : '#C1BFDF',
+      borderRadius: 8,
+      backgroundColor: date ? '#F2EFFC' : '#FFFFFF',
       flexDirection: 'row',
       alignItems: 'center',
-      width: width - dpr(80),
+      height: dpr(48),
+      paddingHorizontal: dpr(16),
     },
-    textInputStyle: {
+    text: {
       fontFamily: 'Gilroy-Semibold',
-      backgroundColor: '#fff',
-      position: 'relative',
-      borderRadius: 4,
-      paddingLeft: isCustom ? dpr(36) : dpr(10),
-      paddingRight: dpr(10),
-      paddingTop: dpr(14),
-      color: colors.textSecondary,
-      fontSize: dpr(12),
-      lineHeight: dpr(15),
-      borderWidth: 1,
+      color: date ? '#3F405B' : '#9998A0',
+      fontSize: dpr(14),
+      lineHeight: dpr(17),
+      marginLeft: dpr(10),
     },
-    iconPositionStyle: {
-      position: 'absolute',
-      left: dpr(10),
-      top: '25%',
-    },
-    activeStartTextInput: {
-      backgroundColor:
-        isStartFocus || selectedStartedDate
-          ? colors.bgOctonary
-          : colors.bgQuinary,
-      borderColor:
-        isStartFocus || selectedStartedDate
-          ? colors.cornflowerBlue
-          : !disable
-          ? colors.borderPrimary
-          : colors.borderSenary,
+    label: {
+      marginBottom: 4,
+      fontFamily: 'Gilroy-Semibold',
+      fontSize: dpr(14),
+      lineHeight: dpr(17),
+      color: colors.textOctonaryVariant,
     },
   });
 };
