@@ -1,17 +1,26 @@
 import {
-  Text,
   StyleSheet,
   Modal,
-  Button,
   View,
   Pressable,
   Animated,
+  Text,
+  TouchableOpacity,
 } from 'react-native';
 import React from 'react';
+import WheelPicker from 'react-native-wheely';
 import dpr from '../../../styles/DevicePixelRatio';
 
 const CustomModal = props => {
-  const {onTouchOutside, isVisible, onCloseModal, modalY} = props;
+  const {
+    onTouchOutside,
+    isVisible,
+    onCloseModal,
+    modalY,
+    options,
+    selectValue,
+    setSelectValue,
+  } = props;
   const customModalStyle = CustomModalStyle();
 
   const outsideTouch = onTouch => {
@@ -38,8 +47,21 @@ const CustomModal = props => {
             customModalStyle.modalSubCont,
             {transform: [{translateY: modalY}]},
           ]}>
-          <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit.</Text>
-          <Button title="close" onPress={onCloseModal} />
+          <>
+            <View style={customModalStyle.headerCont}>
+              <TouchableOpacity onPress={onCloseModal}>
+                <Text>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Text>Done</Text>
+              </TouchableOpacity>
+            </View>
+            <WheelPicker
+              selectedIndex={selectValue}
+              options={options}
+              onChange={index => setSelectValue(index)}
+            />
+          </>
         </Animated.View>
       </View>
     </Modal>
@@ -58,8 +80,8 @@ const CustomModalStyle = () =>
     modalSubCont: {
       backgroundColor: '#FFFFFF',
       width: '100%',
-      maxHeight: dpr('hf') / 2,
-      minHeight: dpr('hf') / 2,
+      maxHeight: dpr(200),
+      minHeight: dpr(200),
       paddingVertical: dpr(15),
       borderTopLeftRadius: dpr(10),
       borderTopRightRadius: dpr(10),
@@ -67,5 +89,11 @@ const CustomModalStyle = () =>
     outsideTouch: {
       flex: 1,
       width: '100%',
+    },
+    headerCont: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingHorizontal: dpr(10),
     },
   });

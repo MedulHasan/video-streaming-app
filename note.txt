@@ -1,7 +1,5 @@
 Next day Plan
-    - Create project folder setup
-    - Create Navigation functionality
-    - Create Pixel Ration functionality for responsive design
+    - customize CustomDatePicker
     - Redux toolkit (rtk-query) setup
     - Setup asset file (font family/svg/lottie/image)
 

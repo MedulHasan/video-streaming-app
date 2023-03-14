@@ -12,19 +12,21 @@ const SelectInput = ({
   icon,
   isError = false,
   error = '',
+  options,
+  selectValue,
+  setSelectValue,
 }) => {
   const {colors} = useTheme();
   const [layout, setLayout] = useState(null);
   const selectInput = selectInputStyle(colors, title, isError, layout);
 
   const [isVisible, setIsVisible] = useState(false);
-  const x = dpr('hf') / 2;
+  const x = dpr(300);
   const [modalY, setModalY] = useState(new Animated.Value(x));
-  console.log(modalY);
   const onOpenModal = () => {
     setIsVisible(true);
     Animated.timing(modalY, {
-      duration: 500,
+      duration: 300,
       toValue: 0,
       useNativeDriver: true,
     }).start();
@@ -33,7 +35,7 @@ const SelectInput = ({
   const onCloseModal = () => {
     setIsVisible(false);
     Animated.timing(modalY, {
-      duration: 500,
+      duration: 300,
       toValue: x,
       useNativeDriver: true,
     }).start();
@@ -58,6 +60,9 @@ const SelectInput = ({
         isVisible={isVisible}
         onCloseModal={onCloseModal}
         modalY={modalY}
+        options={options}
+        selectValue={selectValue}
+        setSelectValue={setSelectValue}
       />
     </>
   );

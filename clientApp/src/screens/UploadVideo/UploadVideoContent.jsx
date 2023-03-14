@@ -10,37 +10,95 @@ import moment from 'moment';
 import FileIcon from '../../assets/svg/attach-file.svg';
 import RightIcon from '../../assets/svg/rightArrow.svg';
 import DatePickerIcon from '../../assets/svg/date-picker-icon.svg';
+import DocumentPicker, {types} from 'react-native-document-picker';
 
 const UploadVideoContent = () => {
-  const [date, setDate] = useState(null);
   const {colors} = useTheme();
   const uploadVideo = UploadVideoStyle();
+
+  const [videoInfo, setVideoInfo] = useState(null);
+  const handleVideoInfo = (name, text) => {
+    setVideoInfo({
+      ...videoInfo,
+      [name]: text,
+    });
+  };
+
+  const [file, setFile] = useState(null);
+
+  let visibilityOption = ['Public', 'Private', 'Unlisted'];
+  const [visibility, setVisibility] = useState(0);
+  let languageOption = ['Bangla', 'English', 'France'];
+  const [language, setLanguage] = useState(0);
+  let categoryOption = ['Education', 'Technology', 'Travel', 'Other'];
+  const [category, setCategory] = useState(0);
+
+  const [date, setDate] = useState(null);
+  const handleFileUpload = async () => {
+    try {
+      const res = await DocumentPicker.pickSingle({
+        type: [types.video],
+      });
+
+      setFile(res);
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+      } else {
+      }
+    }
+  };
   return (
     <View>
       <Text style={uploadVideo.title}>Upload Video</Text>
-      <CustomTextInput label="Video title" style={uploadVideo.mb} />
-      <CustomTextInput label="Video description" style={uploadVideo.mb} />
-      <CustomTextInput label="Thumbnail URL" style={uploadVideo.mb} />
+      <CustomTextInput
+        onChangeText={text => handleVideoInfo('title', text)}
+        label="Video title"
+        style={uploadVideo.mb}
+      />
+      <CustomTextInput
+        onChangeText={text => handleVideoInfo('description', text)}
+        label="Video description"
+        style={uploadVideo.mb}
+      />
+      <CustomTextInput
+        onChangeText={text => handleVideoInfo('thumbnail', text)}
+        label="Thumbnail URL"
+        style={uploadVideo.mb}
+      />
       <CustomDocumentPicker
+        title={file?.name}
         label="Upload Video"
+        onPress={handleFileUpload}
         style={uploadVideo.mb}
         icon={<FileIcon fill={colors.filePrimary} />}
       />
       <SelectInput
+        title={visibilityOption[visibility]}
         label="Visibility"
         style={uploadVideo.mb}
+        selectValue={visibility}
+        setSelectValue={setVisibility}
+        options={visibilityOption}
         icon={<RightIcon fill={colors.textQuaternaryVariant} />}
       />
-      {/* <SelectInput
+      <SelectInput
+        title={languageOption[language]}
         label="Language"
+        selectValue={language}
+        setSelectValue={setLanguage}
+        options={languageOption}
         style={uploadVideo.mb}
         icon={<RightIcon fill={colors.textQuaternaryVariant} />}
       />
       <SelectInput
+        title={categoryOption[category]}
         label="Category"
         style={uploadVideo.mb}
+        selectValue={category}
+        setSelectValue={setCategory}
+        options={categoryOption}
         icon={<RightIcon fill={colors.textQuaternaryVariant} />}
-      /> */}
+      />
       <CustomDatePicker
         label="Publish Date"
         icon={<DatePickerIcon fill={colors.textSecondaryVariant} />}
