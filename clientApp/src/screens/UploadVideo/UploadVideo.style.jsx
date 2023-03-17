@@ -10,7 +10,20 @@ const UploadVideoStyle = () =>
     title: {
       textAlign: 'center',
     },
-    mb: {marginBottom: dpr(10)},
+    mb: {
+      marginBottom: dpr(10),
+    },
+    uploadVideoBtn: {
+      marginTop: dpr(10),
+      backgroundColor: '#0066ff',
+      width: '40%',
+      padding: dpr(10),
+      borderRadius: 4,
+    },
+    btnText: {
+      textAlign: 'center',
+      color: '#FFFFFF',
+    },
   });
 
 export default UploadVideoStyle;

@@ -1,5 +1,6 @@
-import {View, Text} from 'react-native';
-import React, {useState} from 'react';
+import {View, Text, ScrollView, Pressable} from 'react-native';
+import React from 'react';
+import {useFormik} from 'formik';
 import UploadVideoStyle from './UploadVideo.style';
 import CustomTextInput from '../../components/CustomInput/CustomTextInput/CustomTextInput';
 import CustomDocumentPicker from '../../components/CustomInput/CustomDocumentPicker/CustomDocumentPicker';
@@ -11,103 +12,114 @@ import FileIcon from '../../assets/svg/attach-file.svg';
 import RightIcon from '../../assets/svg/rightArrow.svg';
 import DatePickerIcon from '../../assets/svg/date-picker-icon.svg';
 import DocumentPicker, {types} from 'react-native-document-picker';
+import {validationSchema} from './formValidation';
 
 const UploadVideoContent = () => {
   const {colors} = useTheme();
   const uploadVideo = UploadVideoStyle();
-
-  const [videoInfo, setVideoInfo] = useState(null);
-  const handleVideoInfo = (name, text) => {
-    setVideoInfo({
-      ...videoInfo,
-      [name]: text,
-    });
-  };
-
-  const [file, setFile] = useState(null);
-
   let visibilityOption = ['Public', 'Private', 'Unlisted'];
-  const [visibility, setVisibility] = useState(0);
   let languageOption = ['Bangla', 'English', 'France'];
-  const [language, setLanguage] = useState(0);
   let categoryOption = ['Education', 'Technology', 'Travel', 'Other'];
-  const [category, setCategory] = useState(0);
-
-  const [date, setDate] = useState(null);
+  const formik = useFormik({
+    initialValues: {
+      title: 'title1',
+      description: 'desc',
+      thumbnailUrl: 'test',
+      videoFile: null,
+      visibility: 1,
+      language: 1,
+      category: 1,
+      recordingDate: null,
+    },
+    validationSchema: validationSchema,
+    onSubmit: value => {
+      console.log(value);
+    },
+  });
+  console.log(formik);
   const handleFileUpload = async () => {
     try {
-      const res = await DocumentPicker.pickSingle({
+      const file = await DocumentPicker.pickSingle({
         type: [types.video],
       });
-
-      setFile(res);
+      formik.setFieldValue('videoFile', file);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
-      } else {
       }
     }
   };
   return (
     <View>
-      <Text style={uploadVideo.title}>Upload Video</Text>
-      <CustomTextInput
-        onChangeText={text => handleVideoInfo('title', text)}
-        label="Video title"
-        style={uploadVideo.mb}
-      />
-      <CustomTextInput
-        onChangeText={text => handleVideoInfo('description', text)}
-        label="Video description"
-        style={uploadVideo.mb}
-      />
-      <CustomTextInput
-        onChangeText={text => handleVideoInfo('thumbnail', text)}
-        label="Thumbnail URL"
-        style={uploadVideo.mb}
-      />
-      <CustomDocumentPicker
-        title={file?.name}
-        label="Upload Video"
-        onPress={handleFileUpload}
-        style={uploadVideo.mb}
-        icon={<FileIcon fill={colors.filePrimary} />}
-      />
-      <SelectInput
-        title={visibilityOption[visibility]}
-        label="Visibility"
-        style={uploadVideo.mb}
-        selectValue={visibility}
-        setSelectValue={setVisibility}
-        options={visibilityOption}
-        icon={<RightIcon fill={colors.textQuaternaryVariant} />}
-      />
-      <SelectInput
-        title={languageOption[language]}
-        label="Language"
-        selectValue={language}
-        setSelectValue={setLanguage}
-        options={languageOption}
-        style={uploadVideo.mb}
-        icon={<RightIcon fill={colors.textQuaternaryVariant} />}
-      />
-      <SelectInput
-        title={categoryOption[category]}
-        label="Category"
-        style={uploadVideo.mb}
-        selectValue={category}
-        setSelectValue={setCategory}
-        options={categoryOption}
-        icon={<RightIcon fill={colors.textQuaternaryVariant} />}
-      />
-      <CustomDatePicker
-        label="Publish Date"
-        icon={<DatePickerIcon fill={colors.textSecondaryVariant} />}
-        value={date}
-        onConfirm={newDate => {
-          const formatDate = moment(newDate).format('LL');
-          setDate(formatDate);
-        }}
-      />
+      <ScrollView>
+        <Text style={uploadVideo.title}>Upload Video</Text>
+        <CustomTextInput
+          label="Video title"
+          style={uploadVideo.mb}
+          value={formik.values.title}
+          onChangeText={formik.handleChange('title')}
+        />
+        <CustomTextInput
+          label="Video description"
+          style={uploadVideo.mb}
+          value={formik.values.description}
+          onChangeText={formik.handleChange('description')}
+        />
+        <CustomTextInput
+          label="Thumbnail URL"
+          style={uploadVideo.mb}
+          value={formik.values.thumbnailUrl}
+          onChangeText={formik.handleChange('thumbnail')}
+        />
+        <CustomDocumentPicker
+          label="Upload Video"
+          style={uploadVideo.mb}
+          icon={<FileIcon fill={colors.filePrimary} />}
+          title={formik.values.videoFile?.name}
+          onPress={handleFileUpload}
+        />
+        <SelectInput
+          label="Visibility"
+          style={uploadVideo.mb}
+          icon={<RightIcon fill={colors.textQuaternaryVariant} />}
+          title={visibilityOption[formik.values.visibility]}
+          selectValue={formik.values.visibility}
+          options={visibilityOption}
+          setSelectValue={index => formik.setFieldValue('visibility', index)}
+        />
+        <SelectInput
+          label="Language"
+          style={uploadVideo.mb}
+          icon={<RightIcon fill={colors.textQuaternaryVariant} />}
+          title={languageOption[formik.values.language]}
+          selectValue={formik.values.language}
+          options={languageOption}
+          setSelectValue={index => formik.setFieldValue('language', index)}
+        />
+        <SelectInput
+          label="Category"
+          style={uploadVideo.mb}
+          icon={<RightIcon fill={colors.textQuaternaryVariant} />}
+          title={categoryOption[formik.values.category]}
+          selectValue={formik.values.category}
+          options={categoryOption}
+          setSelectValue={index => formik.setFieldValue('category', index)}
+        />
+        <CustomDatePicker
+          label="Publish Date"
+          icon={<DatePickerIcon fill={colors.textSecondaryVariant} />}
+          value={formik.values.recordingDate}
+          onConfirm={newDate => {
+            const formatDate = moment(newDate).format('LL');
+            formik.setFieldValue('recordingDate', formatDate);
+          }}
+        />
+      </ScrollView>
+      <Pressable
+        android_ripple={{color: '#80b3ff'}}
+        style={uploadVideo.uploadVideoBtn}
+        onPress={formik.handleSubmit}>
+        <Text style={uploadVideo.btnText}>Upload Video</Text>
+      </Pressable>
     </View>
   );
 };
