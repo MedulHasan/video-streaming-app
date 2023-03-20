@@ -24,6 +24,11 @@ const UploadVideoStyle = () =>
       textAlign: 'center',
       color: '#FFFFFF',
     },
+    error: {
+      textAlign: 'center',
+      color: 'red',
+      marginBottom: dpr(15),
+    },
   });
 
 export default UploadVideoStyle;

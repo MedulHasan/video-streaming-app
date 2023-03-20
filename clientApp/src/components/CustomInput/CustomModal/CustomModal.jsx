@@ -74,14 +74,14 @@ const CustomModalStyle = () =>
   StyleSheet.create({
     modalCont: {
       flex: 1,
-      backgroundColor: '#000000AA',
+      backgroundColor: '#00000050',
       justifyContent: 'flex-end',
     },
     modalSubCont: {
       backgroundColor: '#FFFFFF',
       width: '100%',
-      maxHeight: dpr(200),
-      minHeight: dpr(200),
+      maxHeight: dpr(400),
+      minHeight: dpr(400),
       paddingVertical: dpr(15),
       borderTopLeftRadius: dpr(10),
       borderTopRightRadius: dpr(10),

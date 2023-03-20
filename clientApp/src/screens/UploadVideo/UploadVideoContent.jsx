@@ -13,6 +13,7 @@ import RightIcon from '../../assets/svg/rightArrow.svg';
 import DatePickerIcon from '../../assets/svg/date-picker-icon.svg';
 import DocumentPicker, {types} from 'react-native-document-picker';
 import {validationSchema} from './formValidation';
+import {usePostVideoMutation} from '../../features/api/apiSlice';
 
 const UploadVideoContent = () => {
   const {colors} = useTheme();
@@ -20,6 +21,9 @@ const UploadVideoContent = () => {
   let visibilityOption = ['Public', 'Private', 'Unlisted'];
   let languageOption = ['Bangla', 'English', 'France'];
   let categoryOption = ['Education', 'Technology', 'Travel', 'Other'];
+
+  const [postVideo, {isLoading}] = usePostVideoMutation();
+  // console.log(data);
   const formik = useFormik({
     initialValues: {
       title: 'title1',
@@ -33,10 +37,12 @@ const UploadVideoContent = () => {
     },
     validationSchema: validationSchema,
     onSubmit: value => {
-      console.log(value);
+      const formData = new FormData();
+      formData.append('title', value.title);
+      formData.append('video', value.videoFile);
+      postVideo(formData);
     },
   });
-  console.log(formik);
   const handleFileUpload = async () => {
     try {
       const file = await DocumentPicker.pickSingle({
@@ -68,7 +74,7 @@ const UploadVideoContent = () => {
           label="Thumbnail URL"
           style={uploadVideo.mb}
           value={formik.values.thumbnailUrl}
-          onChangeText={formik.handleChange('thumbnail')}
+          onChangeText={formik.handleChange('thumbnailUrl')}
         />
         <CustomDocumentPicker
           label="Upload Video"
@@ -118,8 +124,14 @@ const UploadVideoContent = () => {
         android_ripple={{color: '#80b3ff'}}
         style={uploadVideo.uploadVideoBtn}
         onPress={formik.handleSubmit}>
-        <Text style={uploadVideo.btnText}>Upload Video</Text>
+        <Text style={uploadVideo.btnText}>
+          {isLoading ? 'Loading...' : 'Upload Video'}
+        </Text>
       </Pressable>
+
+      {Object.keys(formik.errors).length > 0 && (
+        <Text style={uploadVideo.error}>Fill up the required filed</Text>
+      )}
     </View>
   );
 };

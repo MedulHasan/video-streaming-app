@@ -1,5 +1,5 @@
 import {Text, Pressable, Animated} from 'react-native';
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {selectInputStyle} from './selectInputStyle';
 import {useTheme} from '@react-navigation/native';
 import CustomModal from '../CustomModal/CustomModal';
@@ -21,8 +21,8 @@ const SelectInput = ({
   const selectInput = selectInputStyle(colors, title, isError, layout);
 
   const [isVisible, setIsVisible] = useState(false);
-  const x = dpr(300);
-  const [modalY, setModalY] = useState(new Animated.Value(x));
+  const x = dpr(600);
+  const modalY = useRef(new Animated.Value(x)).current;
   const onOpenModal = () => {
     setIsVisible(true);
     Animated.timing(modalY, {
@@ -30,16 +30,16 @@ const SelectInput = ({
       toValue: 0,
       useNativeDriver: true,
     }).start();
-    // setModalY(new Animated.Value(0));
   };
   const onCloseModal = () => {
-    setIsVisible(false);
+    setTimeout(() => {
+      setIsVisible(false);
+    }, 100);
     Animated.timing(modalY, {
       duration: 300,
       toValue: x,
       useNativeDriver: true,
     }).start();
-    setModalY(new Animated.Value(x));
   };
 
   return (
